@@ -8,4 +8,6 @@ import com.traderev.auction.model.User;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
 
+	public User findbyIdAndPassword(String id, String password);
+	
 }

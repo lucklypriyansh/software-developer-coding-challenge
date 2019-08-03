@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.traderev.auction.exception.UserNotFoundException;
+import com.traderev.auction.model.Bid;
 import com.traderev.auction.model.User;
 import com.traderev.auction.service.UserManagementService;
 
@@ -28,7 +29,7 @@ public class UserController {
 
 	@PostMapping("/Users")
 	public User addUser(@RequestBody User user) {
-		if (usermanagementService.findOne(user.getEmail()) == null) {
+		if (usermanagementService.findOne(user.getId()) == null) {
 			throw new UserNotFoundException("User with email id not exist");
 		}
 		return usermanagementService.addUser(user);
@@ -38,6 +39,12 @@ public class UserController {
 	public User addUser(@PathVariable("userId") String userId) {
 
 		return usermanagementService.findOne(userId);
+	}
+
+	@PostMapping("/Users/Bid")
+	public void postBid(@RequestBody Bid bid) {
+
+		usermanagementService.placeBid(bid);
 	}
 
 }

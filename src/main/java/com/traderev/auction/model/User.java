@@ -5,17 +5,40 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import lombok.Data;
-
 @Document(collection="User")
-@Data
+
 public class User {
 
 	@Id
-	private String email;
+	private String id;
 	
 	private String userPassword;
+	
 	private List<String> participatingAuctions;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getUserPassword() {
+		return userPassword;
+	}
+
+	public void setUserPassword(String userPassword) {
+		this.userPassword = userPassword;
+	}
+
+	public List<String> getParticipatingAuctions() {
+		return participatingAuctions;
+	}
+
+	public void setParticipatingAuctions(List<String> participatingAuctions) {
+		this.participatingAuctions = participatingAuctions;
+	}
 	
 	
 	
