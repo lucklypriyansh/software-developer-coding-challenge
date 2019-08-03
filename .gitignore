@@ -110,3 +110,4 @@ target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputF
 target/surefire-reports/com.traderev.auction.TradeRevCarAuctionSystemApplicationTests.txt
 target/surefire-reports/TEST-com.traderev.auction.TradeRevCarAuctionSystemApplicationTests.xml
 target/test-classes/com/traderev/auction/TradeRevCarAuctionSystemApplicationTests.class
+*.
