@@ -27,7 +27,7 @@ public class LoginController {
 
 		LoginResponse loginResponse = new LoginResponse();
 
-		User user = userRepository.findbyIdAndPassword(loginRequest.getUserName(), loginRequest.getPassword());
+		User user = userRepository.findByIdAndUserPassword(loginRequest.getUserName(), loginRequest.getPassword());
 		JwtBuilder builder = Jwts.builder().setSubject(user.getId()).claim("userId", user.getId())
 				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "MySecretKey");
 		loginResponse.setAuthtoken(builder.compact());

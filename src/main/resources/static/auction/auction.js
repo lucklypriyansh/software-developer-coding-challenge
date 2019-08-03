@@ -9,7 +9,7 @@ angular.module('carTrade.auction', ['ngRoute'])
   });
 }])
 
-.controller('View1Ctrl', [function($http) {
+.controller('AuctionCtrl', [function($http) {
 
 
   
