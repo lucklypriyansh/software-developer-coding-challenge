@@ -12,6 +12,10 @@ public class User {
 	@Id
 	private String id;
 	
+	private String username;
+	
+	
+
 	private String userPassword;
 	
 	private List<String> participatingAuctions;
@@ -27,7 +31,13 @@ public class User {
 	public String getUserPassword() {
 		return userPassword;
 	}
+	public String getUsername() {
+		return username;
+	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
 	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}

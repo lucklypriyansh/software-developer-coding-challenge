@@ -3,6 +3,7 @@ package com.traderev.auction.controller;
 import java.util.List;
 import java.util.TreeSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,12 +14,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.traderev.auction.constants.AuctionStatus;
+import com.traderev.auction.dto.AuctionResponseDto;
 import com.traderev.auction.exception.AuctionNotFoundException;
+import com.traderev.auction.exception.InvalidStatusException;
 import com.traderev.auction.model.Auction;
 import com.traderev.auction.model.Auctioneer;
 import com.traderev.auction.model.Bid;
+import com.traderev.auction.model.Car;
+import com.traderev.auction.model.User;
 import com.traderev.auction.repository.AuctionRepository;
 import com.traderev.auction.repository.AuctioneerRepository;
+import com.traderev.auction.repository.CarRepository;
+import com.traderev.auction.repository.UserRepository;
 
 @RestController
 @RequestMapping("/Auction-Controller")
@@ -26,6 +33,12 @@ public class AuctionController {
 
 	@Autowired
 	AuctionRepository auctionRepository;
+
+	@Autowired
+	CarRepository carRepository;
+
+	@Autowired
+	UserRepository userRepository;
 
 	@Autowired
 	AuctioneerRepository auctioneerRepository;
@@ -38,7 +51,7 @@ public class AuctionController {
 			return auctionRepository.findByStatus(AuctionStatus.STARTED);
 		else if (status.equalsIgnoreCase(AuctionStatus.ENDED.name()))
 			return auctionRepository.findByStatus(AuctionStatus.ENDED);
-		return null;
+		throw new InvalidStatusException("Invalid status code");
 	}
 
 	@PostMapping("/Auctions")
@@ -49,7 +62,6 @@ public class AuctionController {
 
 	@PostMapping("/Auctions/Start/{auctionId}")
 	public Auctioneer startAuction(@PathVariable("auctionId") String auctionId) {
-
 		Auction auction = auctionRepository.findOne(auctionId);
 		if (auction != null) {
 			Auctioneer auctioneer = new Auctioneer();
@@ -74,14 +86,16 @@ public class AuctionController {
 		return auctioneerRepository.findByAuctionId(auctionId).getBids();
 
 	}
-	
-	@GetMapping("/Auctions")
-	public List<Auction> getAllAuctions() {
 
-		return auctionRepository.findAll();
+	@GetMapping("/Auctions")
+	public List<AuctionResponseDto> getAllAuctions() {
+
+		return auctionRepository.findAll().stream().map(auction -> {
+			return convertAuctionToDto(auction);
+		}).collect(Collectors.toList());
 
 	}
-	
+
 	@GetMapping("/Auctions/Bid/Winning/{auctionId}")
 	public Bid getWinningBids(@PathVariable("auctionId") String auctionId) {
 
@@ -89,4 +103,15 @@ public class AuctionController {
 
 	}
 
+	private AuctionResponseDto convertAuctionToDto(Auction auction) {
+		AuctionResponseDto auctionReponse = new AuctionResponseDto();
+		auctionReponse.setAuctionId(auction.getAuctionId());
+		auctionReponse.setEndTime(auction.getEndTime());
+		auctionReponse.setStartTime(auction.getStartTime());
+		auctionReponse.setVehical(carRepository.findByVehicalId(auction.getVehicalId()));
+		User owner=userRepository.findOne(((Car) auctionReponse.getVehical()).getOwnerId());
+		
+		auctionReponse.setOwnerName(owner!=null?owner.getUsername():null);
+		return auctionReponse;
+	}
 }

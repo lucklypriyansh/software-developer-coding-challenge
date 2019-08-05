@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Vehical")
 public class Vehical {
-
+	
 	String type;
 	String vehicalId;
 

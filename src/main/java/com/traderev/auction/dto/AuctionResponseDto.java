@@ -1,26 +1,21 @@
-package com.traderev.auction.model;
+package com.traderev.auction.dto;
 
 import java.util.Date;
-import java.util.List;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.traderev.auction.constants.AuctionStatus;
+import com.traderev.auction.model.User;
+import com.traderev.auction.model.Vehical;
 
+public class AuctionResponseDto {
 
-
-
-@Document(collection = "Auction")
-public class Auction {
-
-	@Id
 	private String auctionId;
-	private String vehicalId;
 	private Date startTime;
 	private Date endTime;
 	private AuctionStatus status;
-	private List<String> registeredUsers;
+	private String ownerName;
+
+	private Vehical vehical;
+	private String imgurl;
 
 	public String getAuctionId() {
 		return auctionId;
@@ -28,14 +23,6 @@ public class Auction {
 
 	public void setAuctionId(String auctionId) {
 		this.auctionId = auctionId;
-	}
-
-	public String getVehicalId() {
-		return vehicalId;
-	}
-
-	public void setVehicalId(String vehicalId) {
-		this.vehicalId = vehicalId;
 	}
 
 	public Date getStartTime() {
@@ -62,12 +49,30 @@ public class Auction {
 		this.status = status;
 	}
 
-	public List<String> getRegisteredUsers() {
-		return registeredUsers;
+	public Vehical getVehical() {
+		return vehical;
 	}
 
-	public void setRegisteredUsers(List<String> registeredUsers) {
-		this.registeredUsers = registeredUsers;
+	public void setVehical(Vehical vehical) {
+		this.vehical = vehical;
 	}
+
+	public String getImgurl() {
+		return imgurl;
+	}
+
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
+	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	
 
 }

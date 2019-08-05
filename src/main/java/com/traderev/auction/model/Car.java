@@ -3,12 +3,20 @@ package com.traderev.auction.model;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Vehical")
-
 public class Car extends Vehical {
 
 	String ownerId;
 	String carName;
 	String status;
+	String imgurl;
+
+	public String getImgurl() {
+		return imgurl;
+	}
+
+	public void setImgurl(String imgurl) {
+		this.imgurl = imgurl;
+	}
 
 	public String getOwnerId() {
 		return ownerId;
