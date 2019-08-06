@@ -44,3 +44,21 @@ User ->> AuctionController: /Auctions/End/{auctionId}
 AuctionController-->>User: auction Ended 
 
 ```
+# Gaps and issues
+
+```sh
+1 need to add authentication flow  
+2  need to create admin flow for starting of auction 
+```
+
+# 
+
+```sh
+1  User cannot place bid in the auction whose status ONHOLD
+2  For placing the bid user must have valid username and password to place bid
+3  user must be a valid user and must have been registered in order to place bid
+4  GET User details - https://car-auction.herokuapp.com/User-Management/Users  (for username and password)
+```
+
+
+
