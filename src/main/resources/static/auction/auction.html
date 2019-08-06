@@ -1,51 +1,53 @@
 <!-- Page Content -->
-<div class="container col-md-12 col-sm-12 col-lg-12 body-bg " data-ng-init="init()" ng-cloak>
-    <div class="col-md-2 col-sm-2 col-lg-2"></div>
-    <div class="col-md-10 col-sm-10 col-lg-10">
-        <div class="row searchrow">
-            <div class="col-md-10 col-sm-10 col-lg-10">
-                <div class="col-md-2 col-sm-2 col-lg-2">
-   
-                </div>
-                <div class="col-md-2 col-sm-2 col-lg-2 pull-left">
-                </div>
-                <div class="col-md-2 col-sm-2 col-lg-2"></div>
-                <div class="col-md-2 col-sm-2 col-lg-2"></div>
-                <div class="col-md-2 col-sm-2 col-lg-2">
-                </div>
-            </div>
-        </div>
-        <div class="md-padding" layout-xs="column" layout="row">
-            <div  flex-xs flex-gt-xs="30" layout="column" style="max-height:450px" ng-repeat="auction in auctions">
-                <md-card style="height:450px;" ng-click="ShowAuctionInfo('/auctionDetailInfo/'+auction.auctionId)">
-                    <img ng-src="{{auction.vehical.imgurl}}" class="md-card-image" style="height:170px;" alt="Image">
-                    <md-card-title>
-                        <md-card-title-text>
-                           <span class="md-headline">Owner {{auction.ownerName}} selling  {{auction.vehical.carName}} </span>
-                        </md-card-title-text>
-                    </md-card-title>
-                    <md-card-actions layout="row">
-                      <md-card-title-text>
-                           <span class="md-headline">Opens on {{auction.startTime| date: 'yyyy-MM-dd'}} end on  {{auction.endTime| date: 'yyyy-MM-dd' }} </span>
-                        </md-card-title-text>
-                        <div style="padding:20px"> Current Status -{{auction.status}}  </div>
-                        <div class="rating">
-                            <md-rating-bar  rb-readonly rb-fill-color="#EC4830"></md-rating-bar>
-                        </div>
-                    </md-card-actions>
-    
-                </md-card>
-            </div>
-        </div>
-        <!--Page number  -->
-        <div class="row">
-            <div class="searchbox">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li class="page-item " ng-repeat="i in getNumber(noofpages) track by $index"><a class="page-link" ng-click="gotoPageNumber($index+1)">{{$index+1}}</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+<div class="container col-md-12 col-sm-12 col-lg-12 body-bg "
+	data-ng-init="init()" ng-cloak>
+	<div class="col-md-2 col-sm-2 col-lg-2"></div>
+	<div class="col-md-10 col-sm-10 col-lg-10">
+		<div class="row searchrow">
+			<div class="col-md-10 col-sm-10 col-lg-10">
+				<div class="col-md-2 col-sm-2 col-lg-2"></div>
+				<div class="col-md-2 col-sm-2 col-lg-2 pull-left"></div>
+				<div class="col-md-2 col-sm-2 col-lg-2"></div>
+				<div class="col-md-2 col-sm-2 col-lg-2"></div>
+				<div class="col-md-2 col-sm-2 col-lg-2"></div>
+			</div>
+		</div>
+		<div  ng-repeat="auction in auctions"  >
+			<md-card md-theme='dark-grey' >
+			
+			 <md-card-title>
+			 <md-card-title-text> 
+			 <span class="md-headline">
+			 {{auction.vehical.carName}}  {{auction.vehical.type}} 
+			 for sale 
+			 </span>
+			<span class="md-subhead">
+			Car in good in condition with minimum bid value of 2000$ for sale
+			
+		    
+			</span> 
+			<span class="md-subhead">
+	         <h1>Status -{{auction.status}}</h1>		
+		    
+			</span>
+			 
+			<span ng-if="auction.status=='ONHOLD'" class="md-subhead">
+			Status onhold hence cannot place a bid
+			</span> 
+			</md-card-title-text> 
+			<md-card-title-media>
+			<div class="md-media-lg card-media">
+				<img ng-src="{{auction.vehical.imgurl}}" class="md-card-image"
+					style="height: 170px;" alt="Image">
+			</div>
+			</md-card-title-media> 
+			</md-card-title> 
+			
+			<md-card-actions layout="row" layout-align="end center">
+			<md-button ng-disabled="auction.status=='ONHOLD'" ng-click="placeBid($event,auction.auctionId)">place bid</md-button> <md-button  ng-click="go('/auctionDetailInfo/'+auction.auctionId)" >show auction info</md-button>
+			</md-card-actions> 
+			</md-card>
+		</div>
+
+	</div>
 </div>

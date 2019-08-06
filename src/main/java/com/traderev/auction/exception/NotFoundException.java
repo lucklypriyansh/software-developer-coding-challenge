@@ -4,10 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class NotFoundException extends RuntimeException {
 
-public class AuctionNotFoundException extends RuntimeException {
-
-	public AuctionNotFoundException(String string) {
+	public NotFoundException(String string) {
 		super(string);
 	}
 

@@ -4,10 +4,12 @@
 angular.module('myApp', [
   'ngRoute',
   'carTrade.auction',
-  'carTrade.login'
+  'carTrade.login',
+  'ngMaterial'
 ]).
 config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
   $locationProvider.hashPrefix('!');
 
+ 
   $routeProvider.otherwise({redirectTo: '/login'});
 }]);

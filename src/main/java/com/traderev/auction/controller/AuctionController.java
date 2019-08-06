@@ -1,7 +1,6 @@
 package com.traderev.auction.controller;
 
 import java.util.List;
-import java.util.TreeSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -15,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.traderev.auction.constants.AuctionStatus;
 import com.traderev.auction.dto.AuctionResponseDto;
-import com.traderev.auction.exception.AuctionNotFoundException;
-import com.traderev.auction.exception.InvalidStatusException;
+import com.traderev.auction.exception.AuctionInvalidState;
+import com.traderev.auction.exception.NotFoundException;
+import com.traderev.auction.mapper.ObjectMappers;
 import com.traderev.auction.model.Auction;
 import com.traderev.auction.model.Auctioneer;
 import com.traderev.auction.model.Bid;
-import com.traderev.auction.model.Car;
-import com.traderev.auction.model.User;
+import com.traderev.auction.model.Vehical;
 import com.traderev.auction.repository.AuctionRepository;
 import com.traderev.auction.repository.AuctioneerRepository;
 import com.traderev.auction.repository.CarRepository;
@@ -35,6 +34,9 @@ public class AuctionController {
 	AuctionRepository auctionRepository;
 
 	@Autowired
+	ObjectMappers objectMappers;
+
+	@Autowired
 	CarRepository carRepository;
 
 	@Autowired
@@ -43,47 +45,49 @@ public class AuctionController {
 	@Autowired
 	AuctioneerRepository auctioneerRepository;
 
-	@GetMapping("/Auctions/{status}")
-	public List<Auction> getAllAuctions(@PathVariable("status") String status) {
-		if (status == null || status.trim().equals(""))
-			return auctionRepository.findAll();
-		if (status.equalsIgnoreCase(AuctionStatus.STARTED.name()))
-			return auctionRepository.findByStatus(AuctionStatus.STARTED);
-		else if (status.equalsIgnoreCase(AuctionStatus.ENDED.name()))
-			return auctionRepository.findByStatus(AuctionStatus.ENDED);
-		throw new InvalidStatusException("Invalid status code");
-	}
-
 	@PostMapping("/Auctions")
-	public Auction createAuction(@RequestBody Auction auction) {
+	public AuctionResponseDto createAuction(@RequestBody Auction auction) {
+
+		if (auctionRepository.findByVehicalId(auction.getVehicalId()) != null) {
+			throw new AuctionInvalidState("Auctin already  present for same vehical id");
+		}
+		if (auction.getVehicalId() == null || carRepository.findByVehicalId(auction.getVehicalId()) == null) {
+			throw new AuctionInvalidState("Invalid vehical id");
+		}
 		auction.setAuctionId(UUID.randomUUID().toString());
-		return auctionRepository.save(auction);
+		return objectMappers.convertAuctionToDto(auctionRepository.save(auction));
 	}
 
 	@PostMapping("/Auctions/Start/{auctionId}")
 	public Auctioneer startAuction(@PathVariable("auctionId") String auctionId) {
 		Auction auction = auctionRepository.findOne(auctionId);
+		auction.setStatus(AuctionStatus.STARTED);
+		auctionRepository.save(auction);
 		if (auction != null) {
 			Auctioneer auctioneer = new Auctioneer();
 			auctioneer.setAuctioneerId(UUID.randomUUID().toString());
 			auctioneer.setAuctionId(auction.getAuctionId());
 			return auctioneerRepository.save(auctioneer);
 		}
-		throw new AuctionNotFoundException("InvalidAuctionId");
+		throw new NotFoundException("InvalidAuctionId");
 	}
 
 	@PostMapping("/Auctions/End/{auctionId}")
-	public Auction endAuction(@PathVariable("auctionId") String auctionId) {
+	public AuctionResponseDto endAuction(@PathVariable("auctionId") String auctionId) {
 		Auction auction = auctionRepository.findOne(auctionId);
 		auction.setStatus(AuctionStatus.ENDED);
-		return auctionRepository.save(auction);
+		return objectMappers.convertAuctionToDto(auctionRepository.save(auction));
 
 	}
 
-	@GetMapping("/Auctions/Bid/{auctionId}")
-	public TreeSet<Bid> getAllBids(@PathVariable("auctionId") String auctionId) {
+	@GetMapping("/Auctions/{auctionId}")
+	public AuctionResponseDto getAuctionInfo(@PathVariable("auctionId") String auctionId) {
 
-		return auctioneerRepository.findByAuctionId(auctionId).getBids();
+		Auctioneer auctioneer = auctioneerRepository.findByAuctionId(auctionId);
+		if (auctioneer == null)
+			throw new NotFoundException("Auction is not started no auctioneer assigned");
+
+		return objectMappers.convertAuctionToDto(auctioneer);
 
 	}
 
@@ -91,7 +95,7 @@ public class AuctionController {
 	public List<AuctionResponseDto> getAllAuctions() {
 
 		return auctionRepository.findAll().stream().map(auction -> {
-			return convertAuctionToDto(auction);
+			return objectMappers.convertAuctionToDto(auction);
 		}).collect(Collectors.toList());
 
 	}
@@ -103,15 +107,4 @@ public class AuctionController {
 
 	}
 
-	private AuctionResponseDto convertAuctionToDto(Auction auction) {
-		AuctionResponseDto auctionReponse = new AuctionResponseDto();
-		auctionReponse.setAuctionId(auction.getAuctionId());
-		auctionReponse.setEndTime(auction.getEndTime());
-		auctionReponse.setStartTime(auction.getStartTime());
-		auctionReponse.setVehical(carRepository.findByVehicalId(auction.getVehicalId()));
-		User owner=userRepository.findOne(((Car) auctionReponse.getVehical()).getOwnerId());
-		
-		auctionReponse.setOwnerName(owner!=null?owner.getUsername():null);
-		return auctionReponse;
-	}
 }

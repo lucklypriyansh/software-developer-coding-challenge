@@ -14,5 +14,6 @@ public interface AuctionRepository extends MongoRepository<Auction, String> {
 	
 	public List<Auction> findByStatus(AuctionStatus status);
 	
+	public Auction findByVehicalId(String id);
 	
 }

@@ -1,9 +1,9 @@
 package com.traderev.auction.dto;
 
 import java.util.Date;
+import java.util.List;
 
 import com.traderev.auction.constants.AuctionStatus;
-import com.traderev.auction.model.User;
 import com.traderev.auction.model.Vehical;
 
 public class AuctionResponseDto {
@@ -13,9 +13,29 @@ public class AuctionResponseDto {
 	private Date endTime;
 	private AuctionStatus status;
 	private String ownerName;
-
 	private Vehical vehical;
 	private String imgurl;
+	List<BidDto> biddingInfo;
+	private String auctioneerId;
+	
+	
+	public String getAuctioneerId() {
+		return auctioneerId;
+	}
+
+	public void setAuctioneerId(String auctioneerId) {
+		this.auctioneerId = auctioneerId;
+	}
+
+
+
+	public List<BidDto> getBiddingInfo() {
+		return biddingInfo;
+	}
+
+	public void setBiddingInfo(List<BidDto> biddingInfo) {
+		this.biddingInfo = biddingInfo;
+	}
 
 	public String getAuctionId() {
 		return auctionId;

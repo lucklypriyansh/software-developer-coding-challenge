@@ -34,7 +34,7 @@ public class UserManagementService {
 	}
 
 	public User addUser(User user) {
-
+		
 		return userRepository.save(user);
 	}
 
@@ -48,8 +48,10 @@ public class UserManagementService {
 		bid.setBidId(UUID.randomUUID().toString());
 		if (auctioneerRepository.countByAuctionId(bid.getAuctionId()) > 0) {
 
-			mongoTemplate.updateFirst(Query.query(Criteria.where("auctionId").is(bid.getAuctionId())),
-					new Update().push("bids", bid), Auctioneer.class);
+			// can use mongo template for optimised update
+			Auctioneer auctioneer=auctioneerRepository.findByAuctionId(bid.getAuctionId());
+			auctioneer.getBids().add(bid);
+			auctioneerRepository.save(auctioneer);
 
 		}
 

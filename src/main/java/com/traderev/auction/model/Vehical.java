@@ -1,12 +1,16 @@
 package com.traderev.auction.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "Vehical")
 public class Vehical {
 	
-	String type;
+	@Id
 	String vehicalId;
+	
+	String type;
+	
 
 	public String getType() {
 		return type;

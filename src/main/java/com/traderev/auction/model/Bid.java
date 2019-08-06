@@ -2,9 +2,18 @@ package com.traderev.auction.model;
 
 public class Bid implements Comparable<Bid> {
 
+	String userId;
 	private String bidId;
 	private Integer bidAmount;
 	private String auctionId;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	@Override
 	public int compareTo(Bid o) {

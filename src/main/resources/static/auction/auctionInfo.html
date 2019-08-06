@@ -1,0 +1,28 @@
+<!-- Page Content -->
+<div class="row" ng-cloak>
+
+	<div class="col-md-2"></div>
+
+	<div class="col-md-8">
+		<md-card md-theme='dark-grey' md-theme-watch=""> 
+		 <h1>Top BIDS</h1>
+		 <hr>
+		<md-card-title>
+		<table>
+			<tr ng-repeat="bid in auction.biddingInfo">
+				<td>{{ bid.bidAmount }}</td>
+				<td>{{ bid.userName }}</td>
+			</tr>
+		</table>
+
+		</md-card-title>
+		
+		 </md-card>
+
+
+
+	</div>
+
+	<div class="col-md-2"></div>
+
+</div>

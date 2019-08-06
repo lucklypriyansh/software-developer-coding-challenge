@@ -1,0 +1,41 @@
+
+<md-card md-theme='dark-grey' style="width:600px;">
+			 <md-card-title>
+			 <md-card-title-text> 
+			 Please place bid in this form
+</md-card-title-text>
+</md-card-title>
+<form name="placeBidForm">
+	
+	<md-input-container class="md-block"> <label>User
+		Name</label> <input required="required" name="userName"
+		ng-model="bid.userName" required>
+	
+
+	</md-input-container>
+
+	<md-input-container> <label>password</label> <input
+		type="password" required="required" name="password"
+		ng-model="bid.password" required>
+	
+	</md-input-container>
+
+
+
+
+	<md-input-container> <label>Bid Amount</label> <input
+		type="number" required="required" name="bidAmount"
+		ng-model="bid.bidAmount" min="0" ng-pattern="/^[0-9]{1,7}$/">
+	
+
+
+	</md-input-container>
+
+
+
+</form>
+
+<md-card-actions layout="row" layout-align="end center">
+<md-button ng-click="saveBid()" type="button" class="btn btn-primary" >saveBid</md-button> </md-card-actions> </md-card>
+
+
