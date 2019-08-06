@@ -4,25 +4,40 @@
 	<div class="col-md-2"></div>
 
 	<div class="col-md-8">
-		<md-card md-theme-watch=""> <md-card-title>
-		<md-card-title-text> Infomation about bids and
-		their username </md-card-title-text> <span>
-			<h3>Winning bid amount {{auction.biddingInfo[0].bidAmount}}</h3>
-		</span> </md-card-title> <md-card-content>
-		<div class="col-md-2"></div>
-		<div class="col-md-8">
-			<table class="table table-striped">
-				<tr ng-repeat="bid in auction.biddingInfo">
-					<td>{{ bid.bidAmount }}</td>
-					<td>{{ bid.userName }}</td>
-				</tr>
-			</table>
 
+
+
+		<md-card md-theme-watch="">
+		
+		 <md-card-title>
+		  <md-card-title-text>
+		    <span class="md-headline">Bid Detail</span> 
+		    <span class="md-subhead">Winning Bid -{{auction.biddingInfo[0].bidAmount}}</span>
+		    
+		    <table class="table table-striped">
+			<tr ng-repeat="bid in auction.biddingInfo">
+				<td>{{ bid.bidAmount }}</td>
+				<td>{{ bid.userName }}</td>
+			</tr>
+		</table>
+		   </md-card-title-text>
+		   <md-card-content>
+		</md-card-content> 
+		<md-card-title-media>
+		<div class="md-media-lg card-media">
+		
+		<img ng-src="{{auction.vehical.imgurl}}" class="md-card-image"
+					style="height: 170px;" alt="Image">
+		
 		</div>
+		</md-card-title-media>
+		 </md-card-title> </md-card>
+
+
+
+
 		<div class="col-md-2"></div>
 
-
-		</md-card-content> </md-card>
 
 
 

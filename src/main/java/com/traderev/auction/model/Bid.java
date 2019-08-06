@@ -18,7 +18,7 @@ public class Bid implements Comparable<Bid> {
 	@Override
 	public int compareTo(Bid o) {
 
-		return this.bidAmount.compareTo(o.bidAmount);
+		return o.bidAmount.compareTo(this.bidAmount);
 	}
 
 	public String getBidId() {
