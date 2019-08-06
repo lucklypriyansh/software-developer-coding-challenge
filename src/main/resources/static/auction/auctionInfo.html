@@ -4,20 +4,25 @@
 	<div class="col-md-2"></div>
 
 	<div class="col-md-8">
-		<md-card md-theme='dark-grey' md-theme-watch=""> 
-		 <h1>Top BIDS</h1>
-		 <hr>
-		<md-card-title>
-		<table>
-			<tr ng-repeat="bid in auction.biddingInfo">
-				<td>{{ bid.bidAmount }}</td>
-				<td>{{ bid.userName }}</td>
-			</tr>
-		</table>
+		<md-card md-theme-watch=""> <md-card-title>
+		<md-card-title-text> Infomation about bids and
+		their username </md-card-title-text> <span>
+			<h3>Winning bid amount {{auction.biddingInfo[0].bidAmount}}</h3>
+		</span> </md-card-title> <md-card-content>
+		<div class="col-md-2"></div>
+		<div class="col-md-8">
+			<table class="table table-striped">
+				<tr ng-repeat="bid in auction.biddingInfo">
+					<td>{{ bid.bidAmount }}</td>
+					<td>{{ bid.userName }}</td>
+				</tr>
+			</table>
 
-		</md-card-title>
-		
-		 </md-card>
+		</div>
+		<div class="col-md-2"></div>
+
+
+		</md-card-content> </md-card>
 
 
 
