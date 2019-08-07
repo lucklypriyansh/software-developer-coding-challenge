@@ -44,6 +44,7 @@ User ->> AuctionController: /Auctions/End/{auctionId}
 AuctionController-->>User: auction Ended 
 
 ```
+
 # Gaps and issues
 
 ```sh
