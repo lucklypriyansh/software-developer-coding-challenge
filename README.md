@@ -5,8 +5,16 @@
 ![Build Status](https://travis-ci.com/lucklypriyansh/software-developer-coding-challenge.svg?branch=master)
 
   
+## CI/CD
+- Email to lucklypriyansh@gmail.com for Travis CI
+- Email to lucklypriyansh@gmail.com for Heroku Acess
 
-  
+## Tech Stack
+- Spring Boot
+- mongo db
+- java 8
+- Junit
+- 
 
 # App url
 
