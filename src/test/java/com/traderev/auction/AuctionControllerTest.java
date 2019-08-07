@@ -46,7 +46,7 @@ import junit.framework.Assert;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(value = AuctionController.class, secure = false)
-public class TradeRevCarAuctionSystemApplicationTests {
+public class AuctionControllerTest {
 
 	@MockBean
 	AuctionRepository auctionRepository;
