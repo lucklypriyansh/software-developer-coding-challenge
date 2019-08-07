@@ -39,13 +39,15 @@ Sequence Diagram for auction flow
 2  need to create admin flow for starting of auction 
 ```
 
-# 
+#  Steps to place bid
 
 ```sh
-1  User cannot place bid in the auction whose status ONHOLD
-2  For placing the bid user must have valid username and password to place bid
-3  user must be a valid user and must have been registered in order to place bid
-4  GET User details - https://car-auction.herokuapp.com/User-Management/Users  (for username and password)
+1   Go to https://car-auction.herokuapp.com/
+2  click on place bid to place bid as shown in image
+   ![alt text](https://i.ibb.co/2vtxGDQ/Screenshot-2019-08-07-at-7-21-02-PM.png)
+3   user must be a valid user and must have been registered in order to place bid
+4   enter username password and bid amount to place bid
+  ![alt text](https://i.ibb.co/9rFSkxw/Screenshot-2019-08-07-at-7-27-33-PM.png)
 ```
 
 
