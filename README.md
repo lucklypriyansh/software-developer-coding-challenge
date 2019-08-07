@@ -30,7 +30,7 @@ $ ./mvnw spring-boot:run
 
 Sequence Diagram for auction flow
 
-![alt text](https://ibb.co/LvV0YBp)
+![alt text](https://i.ibb.co/JCDcm8k/Screenshot-2019-08-07-at-7-17-02-PM.png)
 
 # Gaps and issues
 
