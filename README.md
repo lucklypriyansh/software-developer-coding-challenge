@@ -54,6 +54,7 @@ Sequence Diagram for auction flow
  -  click on place bid to place bid as shown in image
    ![alt text](https://i.ibb.co/2vtxGDQ/Screenshot-2019-08-07-at-7-21-02-PM.png)
  -  user must be a valid user and must have been registered in order to place bid
+ -  Go to Url for getting user information > https://car-auction.herokuapp.com/User-Management/Users
  -  enter username password and bid amount to place bid
     ![alt text](https://i.ibb.co/9rFSkxw/Screenshot-2019-08-07-at-7-27-33-PM.png)
  -  Click on show auction to show auction info
