@@ -14,7 +14,6 @@
 - mongo db
 - java 8
 - Junit
-- 
 
 # App url
 
