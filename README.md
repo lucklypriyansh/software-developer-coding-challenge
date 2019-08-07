@@ -39,6 +39,9 @@ Sequence Diagram for auction flow
 
 ![alt text](https://i.ibb.co/JCDcm8k/Screenshot-2019-08-07-at-7-17-02-PM.png)
 
+## Object Daigrams
+![alt text](https://i.ibb.co/sjHyXCW/Screenshot-2019-08-07-at-10-54-30-PM.png)
+
 # Gaps and issues
 
 ```sh
