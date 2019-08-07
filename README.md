@@ -50,7 +50,8 @@ Sequence Diagram for auction flow
  -  enter username password and bid amount to place bid
     ![alt text](https://i.ibb.co/9rFSkxw/Screenshot-2019-08-07-at-7-27-33-PM.png)
  -  Click on show auction to show auction info
-    https://i.ibb.co/1QfXXhF/Screenshot-2019-08-07-at-9-15-21-PM.png
+    ![alt text](https://i.ibb.co/1QfXXhF/Screenshot-2019-08-07-at-9-15-21-PM.png)
+    
 
 
 
