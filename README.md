@@ -42,9 +42,9 @@ Sequence Diagram for auction flow
 # Gaps and issues
 
 ```sh
-1 need to add authentication flow  
-2 need to create admin flow for starting of auction 
-3 testing is not comprehensive
+1 testing is not comprehensive only testing is done for auction controller need to incoprate more test for each service and    E2E testin need to be done
+2 need to add authentication flow  
+3 need to create admin flow for starting of auction 
 4 need to add swagger documentation
 ```
 
