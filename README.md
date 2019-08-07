@@ -14,6 +14,7 @@
 - mongo db
 - java 8
 - Junit
+- Docker
 
 # App url
 
@@ -24,14 +25,15 @@ https://car-auction.herokuapp.com/
 ```sh
 $ git clone https://github.com/lucklypriyansh/software-developer-coding-challenge.git
 $ cd software-developer-coding-challenge
-$ ./mvnw clean install
-$ ./mvnw spring-boot:run
+$ docker rmi $(docker images -qa -f 'dangling=true')
+$ docker stop $(docker ps -q --filter ancestor=traderevauction )
+$ ./mvnw clean package docker:build
+$ docker run -p 8080:8080 traderevauction
 ```
 
-## URL
+## Swagger Link
 > https://car-auction.herokuapp.com/swagger-ui.html
-
-
+> http://localhost:8080/swagger-ui.html
 
 ## UML diagrams
 
@@ -39,16 +41,17 @@ Sequence Diagram for auction flow
 
 ![alt text](https://i.ibb.co/JCDcm8k/Screenshot-2019-08-07-at-7-17-02-PM.png)
 
-## Object Daigrams
+## Object Diagrams
 ![alt text](https://i.ibb.co/sjHyXCW/Screenshot-2019-08-07-at-10-54-30-PM.png)
 
-# Gaps and issues
+# Gaps and Issues
 
 ```sh
-1 testing is not comprehensive only testing is done for auction controller need to incoprate more test for each service and    E2E testin need to be done
-2 need to add authentication flow  
-3 need to create admin flow for starting of auction 
-4 need to add swagger documentation
+1 Testing is not comprehensive only testing is done for Auction-Controller ,Need to incorporate more test for each service and  E2E testing need to be done using Selenium
+2 Need to add Authentication flow  
+3 Admin flow for starting/stopping of auction 
+4 Add Swagger documentation
+5 Add code documentation
 ```
 
 #  Steps to place bid
