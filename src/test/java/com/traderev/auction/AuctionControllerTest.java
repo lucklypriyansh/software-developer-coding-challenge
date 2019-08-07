@@ -111,6 +111,40 @@ public class AuctionControllerTest {
 	}
 
 	@Test
+	public void testCreateAuctionWhenAuctionAlreadyThereForVehical() throws Exception {
+		Auction auction = createDummyAuction();
+		Vehical vehical = createDummyVehical();
+
+		when(auctionRepository.findByVehicalId(Mockito.anyString())).thenReturn(new Auction());
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Auction-Controller/Auctions")
+				.accept(MEDIA_TYPE_JSON_UTF8).content(objectMapperJson.writeValueAsString(auction))
+				.contentType(MEDIA_TYPE_JSON_UTF8);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+	    assertEquals(result.getResponse().getStatus(),422);
+	    verify(auctionRepository,times(1)).findByVehicalId(Mockito.anyString());
+
+	}
+	@Test
+	public void testCreateAuctionWhenVehicalInvalidVehicalId() throws Exception {
+		Auction auction = createDummyAuction();
+
+		auction.setVehicalId(null);
+		when(auctionRepository.findByVehicalId(Mockito.anyString())).thenReturn(new Auction());
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Auction-Controller/Auctions")
+				.accept(MEDIA_TYPE_JSON_UTF8).content(objectMapperJson.writeValueAsString(auction))
+				.contentType(MEDIA_TYPE_JSON_UTF8);
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+	    assertEquals(result.getResponse().getStatus(),422);
+
+	}
+	
+	@Test
 	public void testStartAuction() throws Exception {
 
 		Auction auction = createDummyAuction();
@@ -135,6 +169,21 @@ public class AuctionControllerTest {
 		Assert.assertTrue(output.getAuctionId().equals(auction.getAuctionId()));
 		Assert.assertTrue(output.getAuctioneerId().equals("auctioneer1"));
 
+	}
+
+	@Test
+	public void testStartAuctionWhenAuctionNotFound() throws Exception {
+
+		Auction auction = createDummyAuction();
+		when(auctionRepository.findOne(Mockito.anyString())).thenReturn(null);
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
+		RequestBuilder requestBuilder = MockMvcRequestBuilders
+				.post(AUCTIONMANAGEMENTURL + "/Auctions/Start/{auctionId}", "12");
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		verify(auctionRepository, times(1)).findOne(Mockito.anyString());
+		assertEquals(result.getResponse().getStatus(), 404);
 	}
 
 	@Test
@@ -193,6 +242,26 @@ public class AuctionControllerTest {
 		Assert.assertTrue(output.getAuctionId().equals(auction.getAuctionId()));
 		Assert.assertTrue(output.getOwnerName().equals("Owner1"));
 
+	}
+	
+	@Test
+	public void testgetAuctionInfoWhenNotFound() throws Exception {
+
+		Auction auction = createDummyAuction();
+
+		when(auctioneerRepository.findByAuctionId(anyString())).thenReturn(null);
+			MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+				java.nio.charset.Charset.forName("UTF-8"));
+
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(AUCTIONMANAGEMENTURL + "/Auctions/{auctionId}",
+				"12");
+
+		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+
+		assertEquals(result.getResponse().getStatus(),404);
+		verify(auctioneerRepository, times(1)).findByAuctionId(anyString());
+
+	
 	}
 
 	@Test

@@ -49,7 +49,7 @@ public class AuctionController {
 	public AuctionResponseDto createAuction(@RequestBody Auction auction) {
 
 		if (auctionRepository.findByVehicalId(auction.getVehicalId()) != null) {
-			throw new AuctionInvalidState("Auctin already  present for same vehical id");
+			throw new AuctionInvalidState("Auction already  present for same vehical id");
 		}
 		if (auction.getVehicalId() == null || carRepository.findByVehicalId(auction.getVehicalId()) == null) {
 			throw new AuctionInvalidState("Invalid vehical id");
@@ -61,9 +61,9 @@ public class AuctionController {
 	@PostMapping("/Auctions/Start/{auctionId}")
 	public Auctioneer startAuction(@PathVariable("auctionId") String auctionId) {
 		Auction auction = auctionRepository.findOne(auctionId);
-		auction.setStatus(AuctionStatus.STARTED);
-		auctionRepository.save(auction);
 		if (auction != null) {
+			auction.setStatus(AuctionStatus.STARTED);
+			auctionRepository.save(auction);
 			Auctioneer auctioneer = new Auctioneer();
 			auctioneer.setAuctioneerId(UUID.randomUUID().toString());
 			auctioneer.setAuctionId(auction.getAuctionId());
