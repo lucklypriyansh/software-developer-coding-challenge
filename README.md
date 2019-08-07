@@ -30,20 +30,7 @@ $ ./mvnw spring-boot:run
 
 Sequence Diagram for auction flow
 
-```mermaid
-sequenceDiagram
-User ->> AuctionController: /Auctions
-AuctionController-->>User: List of all auctions
-User ->> AuctionController: /Auctions/Start/{auctionId}
-AuctionController-->>User: auction started 
-User ->> UserController: /Users/Bid/ (place bid)
-AuctionController-->>User: bid placed 
-User ->> AuctionController: /Auctions/{auctionId} (GET AUCTION INFO)
-AuctionController-->>User: GET AUCTION INFORMATION AND TOP BIDS
-User ->> AuctionController: /Auctions/End/{auctionId}
-AuctionController-->>User: auction Ended 
-
-```
+![alt text](https://mermaidjs.github.io/mermaid-live-editor/#/view/eyJjb2RlIjoic2VxdWVuY2VEaWFncmFtXG5Vc2VyIC0-PiBBdWN0aW9uQ29udHJvbGxlcjogL0F1Y3Rpb25zXG5BdWN0aW9uQ29udHJvbGxlci0tPj5Vc2VyOiBMaXN0IG9mIGFsbCBhdWN0aW9uc1xuVXNlciAtPj4gQXVjdGlvbkNvbnRyb2xsZXI6IC9BdWN0aW9ucy9TdGFydC97YXVjdGlvbklkfVxuQXVjdGlvbkNvbnRyb2xsZXItLT4-VXNlcjogYXVjdGlvbiBzdGFydGVkIFxuVXNlciAtPj4gVXNlckNvbnRyb2xsZXI6IC9Vc2Vycy9CaWQvIChwbGFjZSBiaWQpXG5BdWN0aW9uQ29udHJvbGxlci0tPj5Vc2VyOiBiaWQgcGxhY2VkIFxuVXNlciAtPj4gQXVjdGlvbkNvbnRyb2xsZXI6IC9BdWN0aW9ucy97YXVjdGlvbklkfSAoR0VUIEFVQ1RJT04gSU5GTylcbkF1Y3Rpb25Db250cm9sbGVyLS0-PlVzZXI6IEdFVCBBVUNUSU9OIElORk9STUFUSU9OIEFORCBUT1AgQklEU1xuVXNlciAtPj4gQXVjdGlvbkNvbnRyb2xsZXI6IC9BdWN0aW9ucy9FbmQve2F1Y3Rpb25JZH1cbkF1Y3Rpb25Db250cm9sbGVyLS0-PlVzZXI6IGF1Y3Rpb24gRW5kZWQgXG4iLCJtZXJtYWlkIjp7InRoZW1lIjoiZGVmYXVsdCJ9fQ)
 
 # Gaps and issues
 
