@@ -41,14 +41,14 @@ Sequence Diagram for auction flow
 
 #  Steps to place bid
 
-```sh
+
 1   Go to https://car-auction.herokuapp.com/
 2  click on place bid to place bid as shown in image
    ![alt text](https://i.ibb.co/2vtxGDQ/Screenshot-2019-08-07-at-7-21-02-PM.png)
 3   user must be a valid user and must have been registered in order to place bid
 4   enter username password and bid amount to place bid
   ![alt text](https://i.ibb.co/9rFSkxw/Screenshot-2019-08-07-at-7-27-33-PM.png)
-```
+
 
 
 
