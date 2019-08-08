@@ -7,12 +7,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TreeSet;
 
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -34,13 +34,12 @@ import com.traderev.auction.mapper.ObjectMappers;
 import com.traderev.auction.model.Auction;
 import com.traderev.auction.model.Auctioneer;
 import com.traderev.auction.model.Bid;
-import com.traderev.auction.model.Car;
-import com.traderev.auction.model.User;
 import com.traderev.auction.model.Vehical;
 import com.traderev.auction.repository.AuctionRepository;
 import com.traderev.auction.repository.AuctioneerRepository;
 import com.traderev.auction.repository.CarRepository;
 import com.traderev.auction.repository.UserRepository;
+import com.traderev.auction.test.util.AuctionDummyDataHelper;
 
 import junit.framework.Assert;
 
@@ -68,6 +67,15 @@ public class AuctionControllerTest {
 
 	private String AUCTIONMANAGEMENTURL = "/Auction-Controller";
 
+	AuctionDummyDataHelper auctionDummyDataHelper;
+
+	@Before
+	public  void loadData() {
+
+		auctionDummyDataHelper = new AuctionDummyDataHelper("/dummy/path");
+
+	}
+
 	@Test
 	public void contextLoads() {
 	}
@@ -78,31 +86,30 @@ public class AuctionControllerTest {
 	@Test
 	public void testCreateAuction() throws Exception {
 
-		Auction auction = createDummyAuction();
-		Vehical vehical = createDummyVehical();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
+		Vehical vehical = auctionDummyDataHelper.createDummyVehical();
 
 		when(auctionRepository.findByVehicalId(Mockito.anyString())).thenReturn(null);
-
 		when(carRepository.findByVehicalId(Mockito.anyString())).thenReturn(vehical);
-
 		when(auctionRepository.save(any(Auction.class))).thenReturn(auction);
-		when(objectMappers.convertAuctionToDto(any(Auction.class))).thenReturn(createDummyAuctionResponseDto());
+		when(objectMappers.convertAuctionToDto(any(Auction.class)))
+				.thenReturn(auctionDummyDataHelper.createDummyAuctionResponseDto());
 
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Auction-Controller/Auctions")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(AUCTIONMANAGEMENTURL + "/Auctions")
 				.accept(MEDIA_TYPE_JSON_UTF8).content(objectMapperJson.writeValueAsString(auction))
 				.contentType(MEDIA_TYPE_JSON_UTF8);
 
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
 
 		AuctionResponseDto output = objectMapperJson.readValue(result.getResponse().getContentAsString(),
 				AuctionResponseDto.class);
-		System.out.println(output.getAuctionId());
-		Assert.assertTrue(output.getAuctionId().equals(auction.getAuctionId()));
-		Assert.assertTrue(output.getVehical().getVehicalId().equals(auction.getVehicalId()));
 
+		Assert.assertTrue(output.getAuctionId().equals("12"));
+		Assert.assertTrue(output.getVehical().getVehicalId().equals(auction.getVehicalId()));
+		Assert.assertTrue(output.getOwnerName().equals("Owner1"));
 		verify(carRepository, times(1)).findByVehicalId(Mockito.anyString());
 		verify(auctionRepository, times(1)).save(any(Auction.class));
 		verify(auctionRepository, times(1)).save(any(Auction.class));
@@ -112,45 +119,49 @@ public class AuctionControllerTest {
 
 	@Test
 	public void testCreateAuctionWhenAuctionAlreadyThereForVehical() throws Exception {
-		Auction auction = createDummyAuction();
-		Vehical vehical = createDummyVehical();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
+		Vehical vehical = auctionDummyDataHelper.createDummyVehical();
 
 		when(auctionRepository.findByVehicalId(Mockito.anyString())).thenReturn(new Auction());
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Auction-Controller/Auctions")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(AUCTIONMANAGEMENTURL + "/Auctions")
 				.accept(MEDIA_TYPE_JSON_UTF8).content(objectMapperJson.writeValueAsString(auction))
 				.contentType(MEDIA_TYPE_JSON_UTF8);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-	    assertEquals(result.getResponse().getStatus(),422);
-	    verify(auctionRepository,times(1)).findByVehicalId(Mockito.anyString());
+		assertEquals(result.getResponse().getStatus(), 422);
+		assertEquals(result.getResolvedException().getMessage(), "Auction already  present for same vehical id");
+		verify(auctionRepository, times(1)).findByVehicalId(Mockito.anyString());
 
 	}
+
 	@Test
 	public void testCreateAuctionWhenVehicalInvalidVehicalId() throws Exception {
-		Auction auction = createDummyAuction();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
 
 		auction.setVehicalId(null);
-		when(auctionRepository.findByVehicalId(Mockito.anyString())).thenReturn(new Auction());
+		when(auctionRepository.findByVehicalId(Mockito.anyString())).thenReturn(null);
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/Auction-Controller/Auctions")
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(AUCTIONMANAGEMENTURL + "/Auctions")
 				.accept(MEDIA_TYPE_JSON_UTF8).content(objectMapperJson.writeValueAsString(auction))
 				.contentType(MEDIA_TYPE_JSON_UTF8);
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-	    assertEquals(result.getResponse().getStatus(),422);
+		assertEquals(result.getResponse().getStatus(), 422);
+		assertEquals(result.getResolvedException().getMessage(), "Invalid vehical id");
 
 	}
-	
+
 	@Test
 	public void testStartAuction() throws Exception {
 
-		Auction auction = createDummyAuction();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
 
 		when(auctionRepository.findOne(Mockito.anyString())).thenReturn(auction);
-		when(auctioneerRepository.save(any(Auctioneer.class))).thenReturn(createDummyAuctioneer());
+		when(auctioneerRepository.save(any(Auctioneer.class)))
+				.thenReturn(auctionDummyDataHelper.createDummyAuctioneer());
 
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
@@ -158,7 +169,7 @@ public class AuctionControllerTest {
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
 				.post(AUCTIONMANAGEMENTURL + "/Auctions/Start/{auctionId}", "12");
 
-		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+		MvcResult result = mockMvc.perform(requestBuilder).andExpect(status().isOk()).andReturn();
 
 		Auctioneer output = objectMapperJson.readValue(result.getResponse().getContentAsString(), Auctioneer.class);
 
@@ -174,7 +185,7 @@ public class AuctionControllerTest {
 	@Test
 	public void testStartAuctionWhenAuctionNotFound() throws Exception {
 
-		Auction auction = createDummyAuction();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
 		when(auctionRepository.findOne(Mockito.anyString())).thenReturn(null);
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
@@ -184,14 +195,15 @@ public class AuctionControllerTest {
 
 		verify(auctionRepository, times(1)).findOne(Mockito.anyString());
 		assertEquals(result.getResponse().getStatus(), 404);
+		assertEquals(result.getResolvedException().getMessage(), "InvalidAuctionId");
 	}
 
 	@Test
 	public void testEndAuction() throws Exception {
 
-		Auction auction = createDummyAuction();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
 
-		AuctionResponseDto auctionResponseDto = createDummyAuctionResponseDto();
+		AuctionResponseDto auctionResponseDto = auctionDummyDataHelper.createDummyAuctionResponseDto();
 		auctionResponseDto.setStatus(AuctionStatus.ENDED);
 
 		when(auctionRepository.findOne(Mockito.anyString())).thenReturn(auction);
@@ -219,10 +231,12 @@ public class AuctionControllerTest {
 	@Test
 	public void testgetAuctionInfo() throws Exception {
 
-		Auction auction = createDummyAuction();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
 
-		when(auctioneerRepository.findByAuctionId(anyString())).thenReturn(createDummyAuctioneer());
-		when(objectMappers.convertAuctionToDto(any(Auctioneer.class))).thenReturn(createDummyAuctionResponseDto());
+		when(auctioneerRepository.findByAuctionId(anyString()))
+				.thenReturn(auctionDummyDataHelper.createDummyAuctioneer());
+		when(objectMappers.convertAuctionToDto(any(Auctioneer.class)))
+				.thenReturn(auctionDummyDataHelper.createDummyAuctionResponseDto());
 
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
@@ -243,14 +257,14 @@ public class AuctionControllerTest {
 		Assert.assertTrue(output.getOwnerName().equals("Owner1"));
 
 	}
-	
+
 	@Test
 	public void testgetAuctionInfoWhenNotFound() throws Exception {
 
-		Auction auction = createDummyAuction();
+		Auction auction = auctionDummyDataHelper.createDummyAuction();
 
 		when(auctioneerRepository.findByAuctionId(anyString())).thenReturn(null);
-			MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
+		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
 
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(AUCTIONMANAGEMENTURL + "/Auctions/{auctionId}",
@@ -258,19 +272,20 @@ public class AuctionControllerTest {
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-		assertEquals(result.getResponse().getStatus(),404);
+		assertEquals(result.getResponse().getStatus(), 404);
+		assertEquals(result.getResolvedException().getMessage(), "Auction is not started no auctioneer assigned");
 		verify(auctioneerRepository, times(1)).findByAuctionId(anyString());
 
-	
 	}
 
 	@Test
 	public void testgetAllAuctions() throws Exception {
 
-		List<Auction> auctionList = createDummyAuctionList();
+		List<Auction> auctionList = auctionDummyDataHelper.createDummyAuctionList();
 
 		when(auctionRepository.findAll()).thenReturn(auctionList);
-		when(objectMappers.convertAuctionToDto(any(Auction.class))).thenReturn(createDummyAuctionResponseDto());
+		when(objectMappers.convertAuctionToDto(any(Auction.class)))
+				.thenReturn(auctionDummyDataHelper.createDummyAuctionResponseDto());
 
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
@@ -295,100 +310,18 @@ public class AuctionControllerTest {
 
 		Auctioneer dummyAuctioneer = mock(Auctioneer.class);
 		when(auctioneerRepository.findByAuctionId(anyString())).thenReturn(dummyAuctioneer);
-		when(dummyAuctioneer.getBids()).thenReturn(getBids());
+		when(dummyAuctioneer.getBids()).thenReturn(auctionDummyDataHelper.getBids());
 
 		MediaType MEDIA_TYPE_JSON_UTF8 = new MediaType("application", "json",
 				java.nio.charset.Charset.forName("UTF-8"));
 
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(AUCTIONMANAGEMENTURL + "/Auctions/Bid/Winning/{auctionId}","121");
+		RequestBuilder requestBuilder = MockMvcRequestBuilders
+				.get(AUCTIONMANAGEMENTURL + "/Auctions/Bid/Winning/{auctionId}", "121");
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 
-		Bid bid = objectMapperJson.readValue(result.getResponse().getContentAsString(),
-				Bid.class);
+		Bid bid = objectMapperJson.readValue(result.getResponse().getContentAsString(), Bid.class);
 
-	}
-
-	private User creatDummyUser() {
-		User user = new User();
-		user.setId("Owner1");
-		user.setUsername("John");
-		user.setUserPassword("Welcome@1");
-		return user;
-	}
-
-	private TreeSet<Bid> getBids() {
-	
-		TreeSet<Bid> bids = new TreeSet<>();
-		Bid b = new Bid();
-		b.setAuctionId("owner1");
-		b.setBidAmount(100);
-		b.setUserId("user1");
-		bids.add(b);
-		
-		Bid b2 = new Bid();
-		b2.setAuctionId("owner2");
-		b2.setBidAmount(50);
-		b2.setUserId("user2");
-		bids.add(b2);
-		return bids;
-	}
-	private Vehical createDummyVehical() {
-		Car vehical = new Car();
-		vehical.setType("SEDAN");
-		vehical.setVehicalId("Vehical1");
-		vehical.setCarName("Porsche");
-		vehical.setOwnerId("Owner1");
-		vehical.setStatus("NONE");
-		return vehical;
-	}
-
-	private Auction createDummyAuction() {
-		Auction auction = new Auction();
-		auction.setAuctionId("12");
-		auction.setEndTime(new Date());
-		auction.setEndTime(new Date());
-		auction.setVehicalId("Vehical1");
-		return auction;
-	}
-
-	private List<Auction> createDummyAuctionList() {
-
-		ArrayList<Auction> listofAuctionns = new ArrayList<>();
-
-		listofAuctionns.add(createDummyAuction());
-		listofAuctionns.add(createDummyAuction());
-		listofAuctionns.add(createDummyAuction());
-		listofAuctionns.add(createDummyAuction());
-		return listofAuctionns;
-	}
-
-	private AuctionResponseDto createDummyAuctionResponseDto() {
-		AuctionResponseDto auction = new AuctionResponseDto();
-		auction.setAuctionId("12");
-		auction.setEndTime(new Date());
-		auction.setEndTime(new Date());
-		auction.setVehical(createDummyVehical());
-		auction.setOwnerName("Owner1");
-		return auction;
-	}
-
-	private List<AuctionResponseDto> createDummyAuctionResponseDtoList() {
-		List<AuctionResponseDto> auctionResponseDtoList = new ArrayList<>();
-		auctionResponseDtoList.add(createDummyAuctionResponseDto());
-		auctionResponseDtoList.add(createDummyAuctionResponseDto());
-		auctionResponseDtoList.add(createDummyAuctionResponseDto());
-
-		auctionResponseDtoList.add(createDummyAuctionResponseDto());
-		return auctionResponseDtoList;
-	}
-
-	private Auctioneer createDummyAuctioneer() {
-		Auctioneer auctioneer = new Auctioneer();
-		auctioneer.setAuctionId("12");
-		auctioneer.setAuctioneerId("auctioneer1");
-		;
-		return auctioneer;
 	}
 
 }
