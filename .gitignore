@@ -112,3 +112,4 @@ target/surefire-reports/TEST-com.traderev.auction.TradeRevCarAuctionSystemApplic
 target/test-classes/com/traderev/auction/TradeRevCarAuctionSystemApplicationTests.class
 *.
 *.original
+target
