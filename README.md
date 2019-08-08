@@ -52,6 +52,8 @@ Sequence Diagram for auction flow
 3 Admin flow for starting/stopping of auction 
 4 Add Swagger documentation
 5 Add code documentation
+6 Make auction time based (already time field is there)
+7 Unit test case helpers need to be refined to make data loading for test case should be in generic way
 ```
 
 #  Steps to place bid
